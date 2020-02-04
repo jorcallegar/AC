@@ -7,10 +7,11 @@ Programa de AC
 
 Variables:
 n: tamaño de la imagen
-entradaTipoDePeticion : nos dice si quiere t o quiere d 
+entradaTipoDePeticion : nos dice si quiere 't' o quiere 'd' 
 't' es tiempo
 'd' es datos
-
+x: x de la matriz generada
+y: y de la matriz generada
 
 
 *******************************************/
@@ -18,26 +19,41 @@ entradaTipoDePeticion : nos dice si quiere t o quiere d
 using namespace std;
 int main()
 {
-	int n; 
+	int n =120; 
 	string entradaTipoDePeticion;
+	int x, y;
+	float  A[n][n];
 		
 	if (entradaTipoDePeticion != "t" or entradaTipoDePeticion != "d"){ 
 		cout << "Introduce c o d";
 		cin >> entradaTipoDePeticion;
 	}
-
+	cout << n%2;
 	
-	for(int i=50;i<=100;i+=2)
+	/*
+	cout <<n;
+	if (n % 2 !=0){
+		n=120;
+		cout << "n es:" + n;
+	}**/
+	
+	//////////////////////////////////////////////////
+	/***********************
+	Generacion de matriz
+	***********************/
+	
+	
+	
+	
+	
+	for(x=0 ; x<=n; x+=1)
     {
 	
-    	for(int j=0; j<=100;j+=2)
+    	for(y=0; y<=n; y+=1)
 		{
 				
-    		for(int k=0; k<=100;k+=2)
-			{
-				cout << (float)rand()/RAND_MAX;
-				cout << "  ";
-			}
+    		A[x][y]= ((x*y + x + y) / (3 *n*n))*10^3;
+    	
 		}
 	}
    
