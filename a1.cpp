@@ -13,7 +13,7 @@ entradaTipoDePeticion : nos dice si quiere 't' o quiere 'd'
 x: x de la matriz generada
 y: y de la matriz generada
 
-
+Hola Soy Ainhoa
 *******************************************/
 
 using namespace std;
