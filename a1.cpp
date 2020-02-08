@@ -12,8 +12,13 @@ entradaTipoDePeticion : nos dice si quiere 't' o quiere 'd'
 'd' es datos
 x: x de la matriz generada
 y: y de la matriz generada
-
-Hola Soy Ainhoa
+i,k,j: son variables iterativas
+s: numero de filtros
+m: dimensión de los filtros
+C[20][5][5]: bateria de filtros
+B[s][n][n]: Array resultado de la convolución de la imagen
+R[s][n/2][n/2]: Resultado del pooling
+M[n/2][n/2]: REsultado del promediado. Salida del algoritmo
 *******************************************/
 
 using namespace std;
@@ -21,8 +26,18 @@ int main()
 {
 	int n =120; 
 	string entradaTipoDePeticion;
-	int x, y;
+	int x, y, k, i, j;
 	float  A[n][n];
+	float C[20][5][5];
+	
+	int s = 20;
+	int m = 5;
+	
+	float B[s][n][n];
+	float R[s][n/2][n/2];
+	float M[n/2][n/2];
+	
+	
 		
 	if (entradaTipoDePeticion != "t" or entradaTipoDePeticion != "d"){ 
 		cout << "Introduce c o d";
@@ -59,9 +74,41 @@ int main()
 	
 	
 	/*********************************
-	
+	Generacion de la bateria de filtros
+	Hemos generado  C[k][i][j] que es una bateria de filtros
 	**********************************/
-   
-    system("PAUSE");
+	
+	srand(5);
+	for(k=0; k<s;k++){
+		for(i=0; i<m;i++)
+			for(j=0; j<m;j++){
+				C[k][i][j]= (rand()*pow(-1,j+k))/RAND_MAX
+			}
+		}
+	}
+    
+	/***********************************
+	1.Cálculo de la convolución de la imagen
+	
+	**************************************/
+	
+	
+	/********************************
+	2.Aplicacion de la funcion no lineal
+	*********************************/
+	
+	
+	/***********************************
+	3.Pooling
+	************************************/
+	
+	/***************************************
+	4.Promediado
+	****************************************/
+	
+	
+	
+	
+	system("PAUSE");
     return 0;
 }
