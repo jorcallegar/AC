@@ -1,12 +1,11 @@
 #include "iostream"
 #include "stdlib.h"
-#include <time.h>       /* time */
 #include <math.h>
 #include <string.h>
+#include <time.h>
+#include <sys/time.h>
 /*****************************************
-
 Programa de AC
-
 Variables:
 n: tamaño de la imagen
 entradaTipoDePeticion : nos dice si quiere 't' o quiere 'd' 
@@ -27,16 +26,8 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 	int n;
-	
-	if(argc == 2)
-		n =120; 
-	
-	else
-		n = atoi(argv[2]);
-
-	
 	string entradaTipoDePeticion;
-	int x, y, k, i, j;
+	int x, y, k, i, j, z;
 	float  A[n][n];
 	float C[20][5][5];
 	
@@ -46,6 +37,20 @@ int main(int argc, char *argv[])
 	float B[s][n][n];
 	float R[s][n/2][n/2];
 	float M[n/2][n/2];
+	
+	struct timeval tiempo0, tiempo1;
+	
+	long time;
+	
+	if(argc == 2)
+		n =120; 
+	
+	else
+		n = atoi(argv[2]);
+
+	
+	
+	
 	
 	
 	
@@ -86,6 +91,8 @@ int main(int argc, char *argv[])
 	Hemos generado  C[k][i][j] que es una bateria de filtros
 	**********************************/
 	
+	gettimeofday(&tiempo0, NULL);
+	
 	srand(5);
 	for(k=0; k<s;k++){
 		for(i=0; i<m;i++){
@@ -95,28 +102,62 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+	
     
 	/***********************************
-	1.Cálculo de la convolución de la imagen
+	1.Calculo de la convolucion de la imagen
 	
 	**************************************/
+	
 	
 	
 	/********************************
 	2.Aplicacion de la funcion no lineal
 	*********************************/
 	
+
 	
 	/***********************************
 	3.Pooling
 	************************************/
 	
+	int max;
+	for (z=0; z<s; z++){
+		for(x=0; x<n/2; x++){
+			for(y=0; y<n/2; y++){
+				if(B[z][2*x][2*y] > B[z][2*x][2*y + 1])
+					max = B[z][2*x][2*y];
+				
+				if(max < B[z][2*x+1][2*y])
+					max = B[z][2*x+1][2*y];
+				
+				if(max <  B[z][2*x+1][2*y+1])
+					max = B[z][2*x+1][2*y+1];
+					
+				R[z][x][y] = max;
+			}
+		}
+	}
+	
+	
 	/***************************************
 	4.Promediado
 	****************************************/
 	
+	int media = 0;
+	for (z=0; z<s; z++){
+		for(x=0; x<n/2; x++){
+			for(y=0; y<n/2; y++){
+				media += R[z][x][y];
+			}
+		}
+	}
 	
+	media = media / s;
 	
+	gettimeofday(&tiempo1, NULL);
+	
+	time= tiempo1.tv_sec * 1000000-tiempo0.tv_sec * 1000000;
 	
 	system("PAUSE");
     return 0;
