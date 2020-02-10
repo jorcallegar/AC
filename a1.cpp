@@ -108,13 +108,39 @@ int main(int argc, char *argv[])
 	1.Calculo de la convolucion de la imagen
 	
 	**************************************/
-	
+	for(int z=0; z<s ; z++)
+	{
+ 		for(x=2; x<n-2; x++)
+ 		{
+			for(y=2; y<n-2; y++)
+			{
+				for(i=-(m/2); i<(m/2); i++)
+            	{
+ 					for(j=-(m/2); j<(m/2); j++)
+         			{
+            	 		B[z][x][y]= A[x+i][y+j] * C[z][((m/2) + i)][((m/2) + j)];
+					}		  
+       			}	   
+			}
+		}
+	}
+
 	
 	
 	/********************************
 	2.Aplicacion de la funcion no lineal
 	*********************************/
 	
+	for(int z=0; z<s ; z++)
+	{
+    	for(x=2; x<n-2; x++)
+    	{
+        	for(y=2; y<n-2; y++)
+        	{
+            	B[z][x][i]= 1/(1 + pow(2.718281828459045, -B[z][x][y]));  
+        	}
+    	}
+	}
 
 	
 	/***********************************
