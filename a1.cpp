@@ -1,8 +1,9 @@
 #include "iostream"
 #include "stdlib.h"
 #include <time.h>       /* time */
-
-/******************************************
+#include <math.h>
+#include <string.h>
+/*****************************************
 
 Programa de AC
 
@@ -23,9 +24,17 @@ M[n/2][n/2]: REsultado del promediado. Salida del algoritmo
 *******************************************/
 
 using namespace std;
-int main()
+int main(int argc, char *argv[])
 {
-	int n =120; 
+	int n;
+	
+	if(argc == 2)
+		n =120; 
+	
+	else
+		n = atoi(argv[2]);
+
+	
 	string entradaTipoDePeticion;
 	int x, y, k, i, j;
 	float  A[n][n];
@@ -39,11 +48,9 @@ int main()
 	float M[n/2][n/2];
 	
 	
+	
 		
-	if (entradaTipoDePeticion != "t" or entradaTipoDePeticion != "d"){ 
-		cout << "Introduce c o d";
-		cin >> entradaTipoDePeticion;
-	}
+	
 	cout << n%2;
 	
 	/*
@@ -62,10 +69,10 @@ int main()
 	
 	
 	
-	for(x=0 ; x<=n; x+=1)
+	for(x=0 ; x<n; x+=1)
     {
 	
-    	for(y=0; y<=n; y+=1)
+    	for(y=0; y<n; y+=1)
 		{
 				
     		A[x][y]= ((x*y + x + y) / (3 *n*n))*10^3;
@@ -73,7 +80,7 @@ int main()
 		}
 	}
 	
-	
+	system("pause");
 	/*********************************
 	Generacion de la bateria de filtros
 	Hemos generado  C[k][i][j] que es una bateria de filtros
@@ -81,9 +88,10 @@ int main()
 	
 	srand(5);
 	for(k=0; k<s;k++){
-		for(i=0; i<m;i++)
+		for(i=0; i<m;i++){
+		
 			for(j=0; j<m;j++){
-				C[k][i][j]= (rand()*pow(-1,j+k))/RAND_MAX
+				C[k][i][j]= (rand()*pow(-1,j+k))/RAND_MAX;
 			}
 		}
 	}
