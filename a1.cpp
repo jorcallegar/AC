@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 		}
 	}
 	
-	system("pause");
+	
 	/*********************************
 	Generacion de la bateria de filtros
 	Hemos generado  C[k][i][j] que es una bateria de filtros
