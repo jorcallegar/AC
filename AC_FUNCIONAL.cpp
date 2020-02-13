@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
 	/*************
 	3.Pooling
 	************/
-	cout << "*********************************" << end;
+	cout << "*********************************" << endl;
 	int max;
 	for (z=0; z<s; z++){
 		for(x=0; x<n/2; x++){
@@ -193,7 +193,7 @@ int main(int argc, char *argv[])
 		}
 	}
 	
-	cout << "*********************************" << end;
+	cout << "*********************************" << endl;
 	
 	cout << "Parte Promedio" << endl;
 	system("pause");

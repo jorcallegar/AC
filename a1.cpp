@@ -33,8 +33,8 @@ int main(int argc, char *argv[])
 	
 	int s = 20;
 	int m = 5;
-	
-	float B[s][n][n];
+	double d;
+	double B[s][n][n];
 	float R[s][n/2][n/2];
 	float M[n/2][n/2];
 	
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 		n = atoi(argv[2]);
 
 	
-	
+
 	
 	
 	
@@ -119,6 +119,7 @@ int main(int argc, char *argv[])
  					for(j=-(m/2); j<(m/2); j++)
          			{
             	 		B[z][x][y]= A[x+i][y+j] * C[z][((m/2) + i)][((m/2) + j)];
+            	 		
 					}		  
        			}	   
 			}
@@ -133,11 +134,16 @@ int main(int argc, char *argv[])
 	
 	for(int z=0; z<s ; z++)
 	{
+	
+		
     	for(x=2; x<n-2; x++)
     	{
         	for(y=2; y<n-2; y++)
         	{
-            	B[z][x][i]= 1/(1 + pow(2.718281828459045, -B[z][x][y]));  
+        		d=(B[z][x][y]);
+            	//B[z][x][y]=(1/(1 + pow(2.718281828459045,d )));  
+            	cout << d;
+            	cout << endl;
         	}
     	}
 	}
@@ -145,7 +151,7 @@ int main(int argc, char *argv[])
 	
 	/***********************************
 	3.Pooling
-	************************************/
+	************************************
 	
 	int max;
 	for (z=0; z<s; z++){
@@ -168,7 +174,7 @@ int main(int argc, char *argv[])
 	
 	/***************************************
 	4.Promediado
-	****************************************/
+	****************************************
 	
 	int media = 0;
 	for (z=0; z<s; z++){
@@ -187,4 +193,5 @@ int main(int argc, char *argv[])
 	
 	system("PAUSE");
     return 0;
+    **/
 }
