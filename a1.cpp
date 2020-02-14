@@ -81,22 +81,6 @@ int main( int argc, char *argv[] )
 	long time;
 	
 	
-
-	
-	
-	
-	
-		
-	
-	cout << n%2;
-	
-	/*
-	cout <<n;
-	if (n % 2 !=0){
-		n=120;
-		cout << "n es:" + n;
-	}**/
-	
 	//////////////////////////////////////////////////
 	/*********
 	Generacion de matriz
@@ -231,6 +215,7 @@ int main( int argc, char *argv[] )
 	gettimeofday(&tiempo1, NULL);
 	
 	time= tiempo1.tv_sec * 1000000-tiempo0.tv_sec * 1000000;
+	cout << "El tiempo que tarda es: " << time << endl;
 	
 	system("PAUSE");
     
