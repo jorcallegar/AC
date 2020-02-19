@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <stdlib.h>
 #include <math.h>
@@ -44,8 +45,8 @@ int main( int argc, char *argv[] )
 	*******************/
 	
 	
-	int x, y, z;						//variables para la matriz
-	int k, i, j;						//Variables iteracciones
+	long int x, y, z;						//variables para la matriz
+	long int k, i, j;						//Variables iteracciones
 	
 	/*****************
 	Parte inicialización del main
@@ -64,8 +65,8 @@ int main( int argc, char *argv[] )
 			tipo_resultado = false; 
 	}
 
-	
-	float  A[n][n];
+	//float A[n][n];
+	float  *A;
 	float C[20][5][5];
 	
 	int s = 20;
@@ -79,11 +80,15 @@ int main( int argc, char *argv[] )
 	
 	long time;
 	
+	A = new float[n*n];
+	
 	
 	//////////////////////////////////////////////////
 	/*********
 	Generacion de matriz
 	*********/
+	
+	
 	
 	
 	
@@ -93,7 +98,7 @@ int main( int argc, char *argv[] )
     	for(y=0; y<n; y++)
 		{
 				
-    		A[x][y]= ((x*y + x + y) / (3 *n*n))*10*10*10;
+    		A[x*n+y]= ((x*y + x + y) / (3 *n*n))*10^3;
     	
 		}
 	}
@@ -112,7 +117,7 @@ int main( int argc, char *argv[] )
 		
 			for(j=0; j<m;j++){
 				C[k][i][j]= (rand()*pow(-1,j+k))/RAND_MAX;
-				// << C[k][i][j] << endl;
+				cout << C[k][i][j] << endl;
 			}
 		}
 	}
@@ -130,12 +135,12 @@ int main( int argc, char *argv[] )
 			{
 				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezarán evidentemete a 0
 				B[z][x][y] = 0;						//Cambio -> Añadido
-				for(i=-(m/2); i<=(m/2); i++)
+				for(i=-(m/2); i<(m/2); i++)
             	{
- 					for(j=-(m/2); j<=(m/2); j++)
+ 					for(j=-(m/2); j<(m/2); j++)
          			{
          				//He añadido el B[z][x][y] en el sumatorio, pues al final todo es una operación de lo va sumando
-            	 		B[z][x][y] += A[x+i][y+j] * C[z][((m/2) + i)][((m/2) + j)]; // Cambio (modificación)
+            	 		B[z][x][y] += A[((x+i)*n-4)+y+j][x+i][y+j] * C[z][((m/2) + i)][((m/2) + j)]; // Cambio (modificación)
             	 		
 					}		  
        			}	   
@@ -172,7 +177,7 @@ int main( int argc, char *argv[] )
 	3.Pooling
 	************/
 	cout << "*********************************" << endl;
-	float max;
+	int max;
 	for (z=0; z<s; z++){
 		for(x=0; x<n/2; x++){
 			for(y=0; y<n/2; y++){
@@ -186,7 +191,6 @@ int main( int argc, char *argv[] )
 					max = B[z][2*x+1][2*y+1];
 					
 				R[z][x][y] = max;
-				
 			}
 		}
 	}
@@ -199,26 +203,16 @@ int main( int argc, char *argv[] )
 	4.Promediado
 	**************/
 	
-	float media;
-	int contador=0;
+	int media = 0;
 	for (z=0; z<s; z++){
-		media=0;
 		for(x=0; x<n/2; x++){
 			for(y=0; y<n/2; y++){
-				//cout << R[z][x][y];
 				media += R[z][x][y];
-
 			}
-			
 		}
-		M[x][y]= media/s;
-		cout << M[x][y];
-		contador++;
-		cout << endl;
-		cout << contador;
 	}
 	
-
+	media = media / s;
 	
 	gettimeofday(&tiempo1, NULL);
 	
