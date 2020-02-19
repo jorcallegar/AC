@@ -94,7 +94,7 @@ int main( int argc, char *argv[] )
     	for(y=0; y<n; y++)
 		{
 				
-    		A[x][y] = (float)((x*y + x + y)) / (((3 *n*n))*(10*10*10));
+    		A[x][y] = (float)((x*y + x + y)) / (float) (((3 *n*n))*(10*10*10));
     		//A[x][y] = A[x][y] / (((3 *n*n))*(10*10*10));
     		//if (x%7==0)
 			//	cout << A[x][y]  << endl;
@@ -111,18 +111,23 @@ int main( int argc, char *argv[] )
 	
 	gettimeofday(&tiempo0, NULL);
 	
-	cout << "C" << endl;	
+	cout << "-----------------------------------	Parte C       ---------------------"  << endl;	
 	srand(5);
-	for(k=0; k<s;k++){
-		for(i=0; i<m;i++){
+	for(k = 0; k < s; k++)
+	{
+		for(i=0; i < m; i++)
+		{
 		
-			for(j=0; j<m;j++){
+			for(j=0; j<m;j++)
+			{
 				C[k][i][j]= (rand()*pow(-1,j+k))/RAND_MAX;
 				// << C[k][i][j] << endl;
-				cout << C[k][i][j] << endl;
+				cout << C[k][i][j] << "\t";
 			}
 		}
 	}
+	
+	cout << endl;
 	system("pause");
 	
     
@@ -131,7 +136,7 @@ int main( int argc, char *argv[] )
 	
 	**************/
 	
-	cout << "Convolucion B"  << endl;
+	cout << "-----------------------------------       Convolucion B       ---------------------"  << endl;
 	for(z=0; z<s ; z++)
 	{
  		for(x=2; x<n-2; x++)
@@ -139,13 +144,13 @@ int main( int argc, char *argv[] )
 			for(y=2; y<n-2; y++)
 			{
 				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezarán evidentemete a 0
-				B[z][x][y] = 0;						//Cambio -> Añadido
-				for(i=-(m/2); i<=(m/2); i++)
+				B[z][x][y] = 0	;						//Cambio -> Añadido
+				for(i= -m/2; i <= m/2; i++)
             	{
- 					for(j=-(m/2); j<=(m/2); j++)
+ 					for(j= -m/2; j <= m/2; j++)
          			{
          				//He añadido el B[z][x][y] en el sumatorio, pues al final todo es una operación de lo va sumando
-            	 		B[z][x][y] += A[x+i][y+j] * C[z][((m/2) + i)][((m/2) + j)]; // Cambio (modificación)
+            	 		B[z][x][y] += A[x+i][y+j] * C[z][m/2 + i][m/2 + j]; // Cambio (modificación)
             	 		if (x%113==0)
 							cout << B[z][x][y]  << endl;
             	 		
@@ -187,13 +192,16 @@ int main( int argc, char *argv[] )
 	3.Pooling
 	************/
 	cout << "*********************************" << endl;
-	float max;
+	float max = 0;
 	for (z=0; z<s; z++){
 		for(x=0; x<n/2; x++){
 			for(y=0; y<n/2; y++){
+				
 				if(B[z][2*x][2*y] > B[z][2*x][2*y + 1])
 					max = B[z][2*x][2*y];
-				
+				else
+					max = B[z][2*x][2*y + 1];
+					
 				if(max < B[z][2*x+1][2*y])
 					max = B[z][2*x+1][2*y];
 				
@@ -218,13 +226,15 @@ int main( int argc, char *argv[] )
 	
 	float media;
 
-	for (z=0; z<s; z++){
-		media=0;
-		for(x=0; x<n/2; x++){
-			for(y=0; y<n/2; y++){
+	for (z=0; z<s; z++)
+	{
+		media = 0.0;
+		for(x=0; x<n/2; x++)
+		{
+			for(y=0; y<n/2; y++)
+			{
 				//cout << R[z][x][y];
 				media += R[z][x][y];
-
 			}
 			
 		}
@@ -244,6 +254,10 @@ int main( int argc, char *argv[] )
 	
 	system("PAUSE");
     
+    cout << "A[0][0]: " << A[0][0] << "A[1][1]: " << A[1][1] <<endl;
+    cout << "A[2][2]: " << A[2][2] << "M[0][0]: " << M[0][0] <<endl;
+    cout << "M[1][1]: " << M[1][1] << "M[2][2]: " << M[2][2] <<endl;
+	 
     return 0;
 }
 
