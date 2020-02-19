@@ -120,7 +120,7 @@ int main( int argc, char *argv[] )
 		
 			for(j=0; j<m;j++)
 			{
-				C[k][i][j]= (rand()*pow(-1,j+k))/RAND_MAX;
+				C[k][i][j]= (rand()*pow(-1.0,(float)j+(float)k))/(float)RAND_MAX;
 				// << C[k][i][j] << endl;
 				cout << C[k][i][j] << "\t";
 			}
@@ -145,9 +145,9 @@ int main( int argc, char *argv[] )
 			{
 				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezarán evidentemete a 0
 				B[z][x][y] = 0	;						//Cambio -> Añadido
-				for(i= -m/2; i <= m/2; i++)
+				for(i= -m/2; i < m/2; i++)
             	{
- 					for(j= -m/2; j <= m/2; j++)
+ 					for(j= -m/2; j < m/2; j++)
          			{
          				//He añadido el B[z][x][y] en el sumatorio, pues al final todo es una operación de lo va sumando
             	 		B[z][x][y] += A[x+i][y+j] * C[z][m/2 + i][m/2 + j]; // Cambio (modificación)
@@ -177,7 +177,9 @@ int main( int argc, char *argv[] )
         	for(y=2; y<n-2; y++)
         	{
         		//cout << B[z][x][y] << "         ";
-            	B[z][x][y]= 1/(1 + 1/pow(2.718281828459045, B[z][x][y]));  
+            	//B[z][x][y]= (float)1.0/(1.0 + (float)1.0/(float)pow(2.718281828459045, (float)B[z][x][y]));  
+            	B[z][x][y]=(float)1.0/(1.0+exp(-B[z][x][y]));
+            	
             	if (x%113==0)
             		cout << B[z][x][y]  << endl;
             	//cout << endl;
@@ -209,8 +211,8 @@ int main( int argc, char *argv[] )
 					max = B[z][2*x+1][2*y+1];
 					
 				R[z][x][y] = max;
-				if (x%7==113)
-					cout << R[z][x][y] << endl;
+				
+				cout << R[z][x][y] << endl;
 				
 			}
 		}
@@ -222,28 +224,27 @@ int main( int argc, char *argv[] )
 	system("pause");
 	/*************
 	4.Promediado
-	**************/
+	*************/
 	
 	float media;
 
-	for (z=0; z<s; z++)
-	{
-		media = 0.0;
-		for(x=0; x<n/2; x++)
-		{
-			for(y=0; y<n/2; y++)
-			{
-				//cout << R[z][x][y];
-				media += R[z][x][y];
-			}
-			
-		}
-		M[x][y]= media/s;
-		cout << M[x][y];
-		
-		cout << endl;
 	
+	media = 0.0;
+	for(x=0; x<n/2; x++)
+	{
+		for(y=0; y<n/2; y++)
+		{
+			for (z=0; z<s; z++)
+			{
+			//cout << R[z][x][y];
+				M[x][y] += R[z][x][y];
+			}
+			M[x][y] = M[x][y] /(float)s;
+		}
+			
 	}
+	
+	
 	
 
 	
@@ -257,7 +258,7 @@ int main( int argc, char *argv[] )
     cout << "A[0][0]: " << A[0][0] << "A[1][1]: " << A[1][1] <<endl;
     cout << "A[2][2]: " << A[2][2] << "M[0][0]: " << M[0][0] <<endl;
     cout << "M[1][1]: " << M[1][1] << "M[2][2]: " << M[2][2] <<endl;
-	 
+
     return 0;
 }
 
