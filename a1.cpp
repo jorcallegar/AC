@@ -86,19 +86,24 @@ int main( int argc, char *argv[] )
 	*********/
 	
 	
-	
+	cout << "----------------------------------------------------       Funciona A       ---------------------"  << endl;
+	cout << n;
 	for(x=0 ; x<n; x++)
     {
 	
     	for(y=0; y<n; y++)
 		{
 				
-    		A[x][y]= ((x*y + x + y) / (3 *n*n))*10*10*10;
+    		A[x][y] = (float)((x*y + x + y)) / (((3 *n*n))*(10*10*10));
+    		//A[x][y] = A[x][y] / (((3 *n*n))*(10*10*10));
+    		//if (x%7==0)
+			//	cout << A[x][y]  << endl;
+			
     	
 		}
 	}
 	
-	
+	system("pause");
 	/***********
 	Generacion de la bateria de filtros
 	Hemos generado  C[k][i][j] que es una bateria de filtros
@@ -106,6 +111,7 @@ int main( int argc, char *argv[] )
 	
 	gettimeofday(&tiempo0, NULL);
 	
+	cout << "C" << endl;	
 	srand(5);
 	for(k=0; k<s;k++){
 		for(i=0; i<m;i++){
@@ -113,15 +119,19 @@ int main( int argc, char *argv[] )
 			for(j=0; j<m;j++){
 				C[k][i][j]= (rand()*pow(-1,j+k))/RAND_MAX;
 				// << C[k][i][j] << endl;
+				cout << C[k][i][j] << endl;
 			}
 		}
 	}
+	system("pause");
 	
     
 	/*************
 	1.Calculo de la convolucion de la imagen
 	
 	**************/
+	
+	cout << "Convolucion B"  << endl;
 	for(z=0; z<s ; z++)
 	{
  		for(x=2; x<n-2; x++)
@@ -136,6 +146,8 @@ int main( int argc, char *argv[] )
          			{
          				//He añadido el B[z][x][y] en el sumatorio, pues al final todo es una operación de lo va sumando
             	 		B[z][x][y] += A[x+i][y+j] * C[z][((m/2) + i)][((m/2) + j)]; // Cambio (modificación)
+            	 		if (x%113==0)
+							cout << B[z][x][y]  << endl;
             	 		
 					}		  
        			}	   
@@ -149,6 +161,8 @@ int main( int argc, char *argv[] )
 	2.Aplicacion de la funcion no lineal
 	***********/
 	system("pause");
+	
+	cout << "Funcion no lineal" << endl;
 	for(int z=0; z<s ; z++)
 	{
 	
@@ -159,7 +173,8 @@ int main( int argc, char *argv[] )
         	{
         		//cout << B[z][x][y] << "         ";
             	B[z][x][y]= 1/(1 + 1/pow(2.718281828459045, B[z][x][y]));  
-            	//cout << B[z][x][y];
+            	if (x%113==0)
+            		cout << B[z][x][y]  << endl;
             	//cout << endl;
             	//pause(1);
         	}
@@ -186,6 +201,8 @@ int main( int argc, char *argv[] )
 					max = B[z][2*x+1][2*y+1];
 					
 				R[z][x][y] = max;
+				if (x%7==113)
+					cout << R[z][x][y] << endl;
 				
 			}
 		}
@@ -200,7 +217,7 @@ int main( int argc, char *argv[] )
 	**************/
 	
 	float media;
-	int contador=0;
+
 	for (z=0; z<s; z++){
 		media=0;
 		for(x=0; x<n/2; x++){
@@ -213,9 +230,9 @@ int main( int argc, char *argv[] )
 		}
 		M[x][y]= media/s;
 		cout << M[x][y];
-		contador++;
+		
 		cout << endl;
-		cout << contador;
+	
 	}
 	
 
