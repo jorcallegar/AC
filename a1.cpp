@@ -94,7 +94,7 @@ int main( int argc, char *argv[] )
     	for(y=0; y<n; y++)
 		{
 				
-    		A[x][y] = (float)((x*y + x + y)) / (float) (((3 *n*n))*(10*10*10));
+    		A[x][y] = (float)(((float)(x*y + x + y) / ((float)(3 *n*n)))*(1000));
     		//A[x][y] = A[x][y] / (((3 *n*n))*(10*10*10));
     		//if (x%7==0)
 			//	cout << A[x][y]  << endl;
@@ -260,3 +260,4 @@ int main( int argc, char *argv[] )
 	 
     return 0;
 }
+
