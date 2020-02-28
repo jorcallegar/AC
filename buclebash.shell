@@ -1,0 +1,8 @@
+ for i in {1..10}
+do
+   for j in 120 500 1000 1500 2000 2500 3000 3500 4000 4500 5000; do ./ac_dinamico $j >> tiempo_noop; done done
+
+
+
+
+

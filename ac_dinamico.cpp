@@ -12,7 +12,7 @@ using namespace std;
 *
 *										Programa de AC
 *	Variables simples:
-*		n: tamaño de la imagen
+*		n: tamaï¿½o de la imagen
 *		tipo_resultado: nos dice si quiere 't' o quiere 'd' 
 *		't' es tiempo
 *		'd' es datos
@@ -24,14 +24,14 @@ using namespace std;
 *
 *	Variables complejas:
 *		C[20][5][5]: bateria de filtros
-*		B[s][n][n]: Array resultado de la convolución de la imagen
+*		B[s][n][n]: Array resultado de la convoluciï¿½n de la imagen
 *		R[s][n/2][n/2]: Resultado del pooling
 *		M[n/2][n/2]: REsultado del promediado. Salida del algoritmo
 *
 */ /*****************************************************************************************/
 
 
-int main( int argc, char *argv[] )
+int main( int args, char *argv[] )
 {
 	long int n;
 	bool tipo_resultado;
@@ -48,22 +48,22 @@ int main( int argc, char *argv[] )
 	long int k, i, j;						//Variables iteracciones
 	
 	/*****************
-	Parte inicialización del main
+	Parte inicializaciï¿½n del main
 	*****************/
 	
-	if ( argc != 2 ){
-		n=120;
-		tipo_resultado = false;
+	if (args == 1)
+	{
+		n = 120;
 	}
-	else {
+	else if (args == 2)
+	{
+		//cout << "EEEhh, colego";
 		n = atoi(argv[1]);
 		
-		if(atoi(argv[2] )== 'd')
-			tipo_resultado = true;
-		else
-			tipo_resultado = false; 
+		
 	}
 
+	long int contador=0;
 	
 	float *A;        //A[n][n];
 	float C[20][5][5];
@@ -90,8 +90,8 @@ int main( int argc, char *argv[] )
 	*********/
 	
 	
-	cout << "----------------------------------------------------      Resultado A 1      ---------------------"  << endl;
-	cout << n;
+	//cout << "----------------------------------------------------      Resultado A 1      ---------------------"  << endl;
+	//cout << n;
 	for(x=0 ; x<n; x++)
     {
 	
@@ -99,25 +99,29 @@ int main( int argc, char *argv[] )
 		{
 				
     		A[x*n +y] = (float)(x*y + x + y) / (3 *n*n)*(1000);
+			contador += 10;
     		
     	
 		}
 	}
 	
-	cout << "A[0][0]: " << A[0] << endl;
-	cout << "A[1][1]: " << A[n+1] << endl;
-    cout << "A[2][2]: " << A[2*n+2] << endl;
-    cout << "A[3][3]: " << A[3*n+3] << endl;
+	//cout << contador <<endl;
 	
-	system("pause");
+	//cout << "A[0][0]: " << A[0] << endl;
+	//cout << "A[1][1]: " << A[n+1] << endl;
+    //cout << "A[2][2]: " << A[2*n+2] << endl;
+    //cout << "A[3][3]: " << A[3*n+3] << endl;
+	
+	//system("pause");
 	/***********l
 	Generacion de la bateria de filtros
 	Hemos generado  C[k][i][j] que es una bateria de filtros
 	************/
 	
 	gettimeofday(&tiempo0, NULL);
+
 	
-	cout << "-----------------------------------	Resultado C 2      ---------------------"  << endl;	
+	//cout << "-----------------------------------	Resultado C 2      ---------------------"  << endl;	
 	srand(5);
 	for(k = 0; k < s; k++)
 	{
@@ -129,15 +133,16 @@ int main( int argc, char *argv[] )
 				C[k][i][j]= (float)((rand()*pow(-1.0,j+k))/RAND_MAX);
 				// << C[k][i][j] << endl;
 				//cout << C[k][i][j] << "\t";
+				contador+= 14;
 			}
 		}
 	}
 	
-	cout << "C[0][0][0]: " << C[0][0][0] << endl;
-	cout << "C[1][1][1]: " << C[1][1][1] << endl;
-    cout << "C[2][2][2]: " << C[2][2][2] << endl;
-    cout << "C[3][3][3]: " << C[3][3][3] << endl;
-	system("pause");
+	//cout << "C[0][0][0]: " << C[0][0][0] << endl;
+	//cout << "C[1][1][1]: " << C[1][1][1] << endl;
+    //cout << "C[2][2][2]: " << C[2][2][2] << endl;
+    //cout << "C[3][3][3]: " << C[3][3][3] << endl;
+	//system("pause");
 	
     
 	/*************
@@ -145,7 +150,7 @@ int main( int argc, char *argv[] )
 	
 	**************/
 	
-    cout << "-----------------------inicialización de Vectores -------------------------" << endl;
+    //cout << "-----------------------inicializaciï¿½n de Vectores -------------------------" << endl;
     for(z = 0; z < s; z++)
     {
         for(x = 0; x < n; x++)
@@ -155,9 +160,15 @@ int main( int argc, char *argv[] )
                 B[z*n*n + x*n + y] = 0;
                 if(y < n/2 && x < n/2)
                 {
-                    R[z*n*n + x*n + y] = 0;
-                    if(z == 0)
-                        M[x*n + y] = 0;
+                    R[z*n*n/4 + x*n/2 + y] = 0;
+					contador+=2;
+                    if(z == 0){
+                        M[x*n/2 + y] = 0;
+						contador+=3;
+					}
+						
+
+					
                 }
                 
             }
@@ -167,21 +178,22 @@ int main( int argc, char *argv[] )
     
     
     
-	cout << "-----------------------------------       Convolucion B  3     ---------------------"  << endl;
+	//cout << "-----------------------------------       Convolucion B  3     ---------------------"  << endl;
 	for(z=0; z<s ; z++)
 	{
  		for(x=2; x<n-2; x++)
  		{
 			for(y=2; y<n-2; y++)
 			{
-				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezarán evidentemete a 0
-				B[z*n*n + x*n + y] = 0;						//Cambio -> Añadido
+				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezarï¿½n evidentemete a 0
+				B[z*n*n + x*n + y] = 0;						//Cambio -> Aï¿½adido
 				for(i= -m/2; i <= m/2; i++)
             	{
  					for(j= -m/2; j <= m/2; j++)
          			{
-         				//He añadido el B[z][x][y] en el sumatorio, pues al final todo es una operación de lo va sumando
+         				//He aï¿½adido el B[z][x][y] en el sumatorio, pues al final todo es una operaciï¿½n de lo va sumando
             	 		B[z*n*n + x*n + y] += A[(x+i)*n+y+j] * C[z][m/2 + i][m/2 + j];
+						contador += 2;
             	 		
 					}		  
        			}	   
@@ -189,18 +201,18 @@ int main( int argc, char *argv[] )
 		}
 	}
 	//cout << "B[0][0][0]: " << B[0] << endl;
-	//cout << "B[1][1][1]: " << B[n*n*n + n + 1] << endl;
-    cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
-    cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
+	//cout << "B[1][1][1]: " << B[n*n + n + 1] << endl;
+    //cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
+    //cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
 
 	
 	
 	/************
 	2.Aplicacion de la funcion no lineal
 	***********/
-	system("pause");	
+	//system("pause");	
 	
-	cout << "-----------------------------------       Aplicacion lineal B  4     ---------------------" << endl;
+	//cout << "-----------------------------------       Aplicacion lineal B  4     ---------------------" << endl;
 	
     float valor = 0;
     for( z=0; z<s ; z++)
@@ -215,40 +227,51 @@ int main( int argc, char *argv[] )
             	//B[z][x][y]= (float)1.0/(1.0 + (float)1.0/(float)pow(2.718281828459045, (float)B[z][x][y]));  
                 
                 B[z*n*n + x*n + y]=(float)(1.0/(1.0+exp(-B[z*n*n + x*n + y])));
+				contador += 14;
             	
             	//cout << endl;
             	//pause(1);
         	}
     	}
 	}
-	//cout << "B[0][0]: " << B[0] << endl;
-	cout << "B[1][1]: " << B[n+1] << endl;
-    cout << "B[2][2]: " << B[2*n+2] << endl;
-    cout << "B[3][3]: " << B[3*n+3] << endl;
+	//cout << "B[0][0][0]: " << B[0] << endl;
+	//cout << "B[1][1][1]: " << B[n*n + n + 1] << endl;
+    //cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
+    //cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
 
-	cout << "Parte Pulling" << endl;
-	system("pause");
+	//cout << "Parte Pulling" << endl;
+	//system("pause");
 	/*************
 	3.Pooling
 	************/
-	cout << "********************************* Pooling R 5 ************************" << endl;
+	//cout << "********************************* Pooling R 5 ************************" << endl;
 	float max = 0;
 	for (z=0; z<s; z++){
 		for(x=0; x<n/2; x++){
 			for(y=0; y<n/2; y++){
 				
 				if(B[z*n*n + 2*x*n + 2*y] > B[z*n*n + 2*x*n + 2*y + 1])//if(B[z][2*x][2*y] > B[z][2*x][2*y + 1])
+				{
 					max = B[z*n*n + 2*x*n + 2*y];
+					contador += 1;
+				}
 				else
+				{
 					max = B[z*n*n + 2*x*n + 2*y + 1];
-					
-				if(max < B[z*n*n + 2*(x+1)*n + 2*y])//if(max < B[z][2*x+1][2*y])
-					max = B[z*n*n + 2*(x+1)*n + 2*y];
+					contador += 1;
+				}	
 				
+				if(max < B[z*n*n + (2*x+1)*n + 2*y])//if(max < B[z][2*x+1][2*y])
+				{
+					max = B[z*n*n + (2*x+1)*n + 2*y];
+					contador += 1;
+				}
 				if(max <  B[z*n*n + (2*x+1)*n + 2*y+1])
+				{
 					max = B[z*n*n + (2*x+1)*n + 2*y+1];
-					
-				R[z*n*n + x*n + y] = max;
+					contador += 1;
+				}
+				R[z*n*n/4 + x*n/2 + y] = max;
 				
 				
 				
@@ -258,15 +281,15 @@ int main( int argc, char *argv[] )
 	
 
 	
-	cout << "R[0][0][0]: " << R[0] << endl;
-	cout << "R[1][1][1]: " << R[n*n + n +1] << endl;
-    cout << "R[2][2][2]: " << R[2*n*n + 2*n +2] << endl;
-    cout << "R[3][3][3]: " << R[3*n*n + 3*n +3] << endl;
+	//cout << "R[0][0][0]: " << R[0] << endl;
+	//cout << "R[1][1][1]: " << R[n*n/4 + n/2 +1] << endl;
+    //cout << "R[2][2][2]: " << R[2*n*n/4 + 2*n/2 +2] << endl;
+    //cout << "R[3][3][3]: " << R[3*n*n/4 + 3*n/2 +3] << endl;
 	
-	cout << "********************************* Promediado M 6 ************************" << endl;
+	//cout << "********************************* Promediado M 6 ************************" << endl;
 	
 	
-	system("pause");
+	
 	/*************
 	4.Promediado
 	*************/
@@ -283,27 +306,31 @@ int main( int argc, char *argv[] )
 			for (z=0; z<s; z++)
 			{
 			//cout << R[z][x][y];
-				M[x*n/2 + y] += R[z*n*n + x*n + y];
+				M[x*n/2 + y] += R[z*n*n/4 + x*n/2 + y];
+				contador += 1;
 				if ( x == 0 && y ==0){
-					cout << "----------------------- Valor R ----------------------------" << endl;
-					cout << R[z*n*n + x*n + y];
+					//cout << "----------------------- Valor R ----------------------------" << endl;
+					//cout << R[z*n*n/4 + x*n/2 + y];
+					contador += 2;
 				}
 				
 			}
 			
 			
 			M[x*n/2 + y] = (float)(M[x*n/2 + y]/s);
+				contador += 4;
 			if ( x == 0 && y ==0){
-					cout << "------------- Posible problemis------------------------" << endl;
-					cout << M[x*n/2 + y] << endl;
+					//cout << "------------- Posible problemis------------------------" << endl;
+					//cout << M[x*n/2 + y] << endl;
+					contador +=2;
 				}
 		}
 			
 	}
-	cout << "M[0][0]: " << M[0] << endl;
-	cout << "M[1][1]: " << M[n/2 + 1] << endl;
-    cout << "M[2][2]: " << M[2*n/2 + 1] << endl;
-    cout << "M[3][3]: " << M[3*n/2 + 3] << endl;
+	//cout << "M[0][0]: " << M[0] << endl;
+	//cout << "M[1][1]: " << M[n/2 + 1] << endl;
+    //cout << "M[2][2]: " << M[2*n/2 + 2] << endl;
+    //cout << "M[3][3]: " << M[3*n/2 + 3] << endl;
 	
 	
 	
@@ -311,21 +338,25 @@ int main( int argc, char *argv[] )
 	
 	gettimeofday(&tiempo1, NULL);
 	
-	time= tiempo1.tv_sec -tiempo0.tv_sec ;
-	cout << "El tiempo que tarda es: " << time << endl;
-	cout << "Resultados finales ::::::::::::::::"<<endl;
-	system("PAUSE");
+	
+	time= ((tiempo1.tv_sec*pow(10,6)) +(tiempo1.tv_usec)) - ((tiempo0.tv_sec*pow(10,6)) +(tiempo0.tv_usec))   ;
+	cout << time << ";";
+	cout <<  n << ",";
+	cout << (contador/pow(10,6)) <<":"<< endl;
+	//cout << "Resultados finales ::::::::::::::::"<<endl;
+	///system("PAUSE");
     
-    cout << "A[0][0]: " << A[0] << endl;
-	cout << "A[1][1]: " << A[n + 1] << endl;
-    cout << "A[2][2]: " << A[2*n + 2] << endl;
-    cout << "A[3][3]: " << A[3*n + 3] << endl;
+    //cout << "A[0][0]: " << A[0] << endl;
+	//cout << "A[1][1]: " << A[n + 1] << endl;
+    //cout << "A[2][2]: " << A[2*n + 2] << endl;
+    //cout << "A[3][3]: " << A[3*n + 3] << endl;
     
-	cout << "M[0][0]: " << M[0] << endl;
-    cout << "M[1][1]: " << M[n/2 + 1] << endl; 
-	cout << "M[2][2]: " << M[2*n/2 + 2] << endl;
-	cout << "M[3][3]: " << M[3*n/2 + 3] << endl;
-
+	//cout << "M[0][0]: " << M[0] << endl;
+    //cout << "M[1][1]: " << M[n/2 + 1] << endl; 
+	//cout << "M[2][2]: " << M[2*n/2 + 2] << endl;
+	//cout << "M[3][3]: " << M[3*n/2 + 3] << endl;
     return 0;
+	
 }
+ 
 

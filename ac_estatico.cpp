@@ -8,32 +8,32 @@
 
 using namespace std;
 
-/*****************************************************************************************/ /*
-*																						     /
-*										Programa de AC                                       /
-*	Variables simples:																		 /
-*		n: tama�o de la imagen                                                               /
-*		tipo_resultado: nos dice si quiere 't' o quiere 'd'                                  /
-*		't' es tiempo                                                                        /
-*		'd' es datos 																		 /
-*		x: x de la matriz generada                                                           /
-*		y: y de la matriz generada                                                           /
-*		i,k,j: son variables iterativas                                                      /
-*		s: numero de filtros                                                                 /
-*		m: dimensión de los filtros                                                         /
-*                                                                                            /
-*	Variables complejas:                                                                     /
-*		C[20][5][5]: bateria de filtros                                                      /
-*		B[s][n][n]: Array resultado de la convoluci�n de la imagen                           /
-*		R[s][n/2][n/2]: Resultado del pooling                                                /
-*		M[n/2][n/2]: REsultado del promediado. Salida del algoritmo                          / 
-*                                                                                            /
+/****************************************************************************************/ /*
+*
+*										Programa de AC
+*	Variables simples:
+*		n: tamaño de la imagen
+*		tipo_resultado: nos dice si quiere 't' o quiere 'd' 
+*		't' es tiempo
+*		'd' es datos
+*		x: x de la matriz generada
+*		y: y de la matriz generada
+*		i,k,j: son variables iterativas
+*		s: numero de filtros
+*		m: dimensiÃ³n de los filtros
+*
+*	Variables complejas:
+*		C[20][5][5]: bateria de filtros
+*		B[s][n][n]: Array resultado de la convolución de la imagen
+*		R[s][n/2][n/2]: Resultado del pooling
+*		M[n/2][n/2]: REsultado del promediado. Salida del algoritmo
+*
 */ /*****************************************************************************************/
 
 
-int main( int argc, char *argv[] )
+int main( int args, char *argv[] )
 {
-	int n;
+	long int n;
 	bool tipo_resultado;
 	
 	/******************
@@ -42,41 +42,36 @@ int main( int argc, char *argv[] )
 	False: Tiempos
 	
 	*******************/
-	
-	
-	long int x, y, z;						//variables para la matriz
-	long int k, i, j;						//Variables iteracciones
+	char  t = *argv[2];
+	int x, y, z;						//variables para la matriz
+	int k, i, j;						//Variables iteracciones
 	
 	/*****************
-	Parte inicializaci�n del main
+	Parte inicialización del main
 	*****************/
 	
-	if ( argc != 2 ){
-		n=120;
-		tipo_resultado = false;
+	if (args == 1)
+	{
+		n = 120;
 	}
-	else {
+	else if (args == 3)
+	{
 		n = atoi(argv[1]);
+		if ((n % 2) != 0)
+		{
+			cout << "El argumento n debe ser múltiplo de 2.";
+			return 1;
+		}
 		
-		if(atoi(argv[2] )== 'd')
-			tipo_resultado = true;
-		else
-			tipo_resultado = false; 
 	}
 
-	
-	float  *A;
-	A = new float[n*n];
+	float  A[n][n];
 	float C[20][5][5];
 	
 	int s = 20;
 	int m = 5;
 	
-	//float B[s][n][n];
-	
-	float *B;
-	B= new float[s*n*n];
-	
+	float B[s][n][n];
 	float R[s][n/2][n/2];
 	float M[n/2][n/2];
 	
@@ -99,17 +94,16 @@ int main( int argc, char *argv[] )
     	for(y=0; y<n; y++)
 		{
 				
-    		//A[x][y] = (float)(((float)(x*y + x + y) / ((float)(3 *n*n)))*(1000));
-			A[x*n+y] = (float)(((float)(x*y + x + y) / ((float)(3 *n*n)))*(1000));
-    		cout <<"Funciona";
+    		A[x][y] = (float)(x*y + x + y) / (3 *n*n)*(1000);
+    		
     	
 		}
 	}
 	
-	cout << "A[0][0]: " << A[0] << endl;
-	cout << "A[1][1]: " << A[1*n+1] << endl;
-    cout << "A[2][2]: " << A[2*n+2] << endl;
-    cout << "A[3][3]: " << A[3*n+3] << endl;
+	cout << "A[0][0]: " << A[0][0] << endl;
+	cout << "A[1][1]: " << A[1][1] << endl;
+    cout << "A[2][2]: " << A[2][2] << endl;
+    cout << "A[3][3]: " << A[3][3] << endl;
 	
 	system("pause");
 	/***********
@@ -128,9 +122,9 @@ int main( int argc, char *argv[] )
 		
 			for(j=0; j<m;j++)
 			{
-				C[k][i][j]= (rand()*pow(-1.0,(float)j+(float)k))/(float)RAND_MAX;
+				C[k][i][j]= (float)((rand()*pow(-1.0,j+k))/RAND_MAX);
 				// << C[k][i][j] << endl;
-				cout << C[k][i][j] << "\t";
+				//cout << C[k][i][j] << "\t";
 			}
 		}
 	}
@@ -154,60 +148,58 @@ int main( int argc, char *argv[] )
  		{
 			for(y=2; y<n-2; y++)
 			{
-				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezar�n evidentemete a 0
-				//B[z][x][y] = 0	;	
-				B[z * (n-5) * (n-5) + x * (n-5) + y] =0;					//Cambio -> A�adido
+				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezarán evidentemete a 0
+				B[z][x][y] = 0;						//Cambio -> Añadido
 				for(i= -m/2; i <= m/2; i++)
             	{
  					for(j= -m/2; j <= m/2; j++)
          			{
-         				//He a�adido el B[z][x][y] en el sumatorio, pues al final todo es una operaci�n de lo va sumando
-            	 		B[z*(n-5)*(n-5)+x*(n-5)+y] += A[x*(n-5)+i+y+j] * C[z][m/2 + i][m/2 + j];
+         				//He añadido el B[z][x][y] en el sumatorio, pues al final todo es una operación de lo va sumando
+            	 		B[z][x][y] += A[x+i][y+j] * C[z][m/2 + i][m/2 + j];
             	 		
 					}		  
        			}	   
 			}
 		}
 	}
-	cout << "B[0][0][0]: " << B[0*(n-5)*(n-5)+0*(n-5)+0] << endl;
-	cout << "B[1][1][1]: " << B[1*(n-5)*(n-5)+1*(n-5)+1] << endl;
-    cout << "B[2][2][2]: " << B[2*(n-5)*(n-5)+2*(n-5)+2] << endl;
-    cout << "B[3][3][3]: " << B[3*(n-5)*(n-5)+3*(n-5)+3] << endl;
+	cout << "B[0][0][0]: " << B[0][0][0] << endl;
+	cout << "B[1][1][1]: " << B[1][1][1] << endl;
+    cout << "B[2][2][2]: " << B[2][2][2] << endl;
+    cout << "B[3][3][3]: " << B[3][3][3] << endl;
 
 	
 	
 	/************
 	2.Aplicacion de la funcion no lineal
 	***********/
-	system("pause");
+	system("pause");	
 	
 	cout << "-----------------------------------       Aplicacion lineal B  4     ---------------------" << endl;
 	for(int z=0; z<s ; z++)
 	{
 	
 		
-    	for(x=2; x<n-2; x++)
+    	for(x=0; x<n; x++)
     	{
-        	for(y=2; y<n-2; y++)
+        	for(y=0; y<n; y++)
         	{
         		//cout << B[z][x][y] << "         ";
             	//B[z][x][y]= (float)1.0/(1.0 + (float)1.0/(float)pow(2.718281828459045, (float)B[z][x][y]));  
-            	B[z][x][y]=(float)1.0/(1.0+exp(-B[z][x][y]));
-            	//B[z*(n-5)*(n-5)+x*(n-5)+y] = (float)1.0/(1.0+exp(-B[z][x][y]));
+            	B[z][x][y]=(float)(1.0/(1.0+exp(-B[z][x][y])));
+            	
             	
             	//cout << endl;
             	//pause(1);
         	}
     	}
 	}
-	cout << "B[0][0][0]: " << B[0*(n-5)*(n-5)+0*(n-5)+0] << endl;
-	cout << "B[1][1][1]: " << B[1*(n-5)*(n-5)+1*(n-5)+1] << endl;
-    cout << "B[2][2][2]: " << B[2*(n-5)*(n-5)+2*(n-5)+2] << endl;
-    cout << "B[3][3][3]: " << B[3*(n-5)*(n-5)+3*(n-5)+3] << endl;
+	cout << "B[0][0][0]: " << B[0][0][0] << endl;
+	cout << "B[1][1][1]: " << B[1][1][1] << endl;
+    cout << "B[2][2][2]: " << B[2][2][2] << endl;
+    cout << "B[3][3][3]: " << B[3][3][3] << endl;
 
 	cout << "Parte Pulling" << endl;
 	system("pause");
-	
 	/*************
 	3.Pooling
 	************/
@@ -259,18 +251,23 @@ int main( int argc, char *argv[] )
 	{
 		for(y=0; y<n/2; y++)
 		{
+			M[x][y] = 0;
 			for (z=0; z<s; z++)
 			{
 			//cout << R[z][x][y];
 				M[x][y] += R[z][x][y];
 				if ( x == 0 && y ==0){
+					cout << "----------------------- Valor R ----------------------------" << endl;
 					cout << R[z][x][y];
 				}
 				
 			}
-			M[x][y] = M[x][y] /(float)s;
+			
+			
+			M[x][y] = (float)(M[x][y]/s);
 			if ( x == 0 && y ==0){
-					cout << M[x][y];
+					cout << "------------- Posible problemis------------------------" << endl;
+					cout << M[x][y] << endl;
 				}
 		}
 			
@@ -291,15 +288,15 @@ int main( int argc, char *argv[] )
 	cout << "Resultados finales ::::::::::::::::"<<endl;
 	system("PAUSE");
     
-    cout << "A[0][0]: " << A[0] << endl;
-	cout << "A[1][1]: " << A[1*n+1] << endl;
-    cout << "A[2][2]: " << A[2*n+2] << endl;
-    cout << "A[3][3]: " << A[3*n+3] << endl;
+    cout << "A[0][0]: " << A[0][0] << endl;
+	cout << "A[1][1]: " << A[1][1] << endl;
+    cout << "A[2][2]: " << A[2][2] << endl;
+    cout << "A[3][3]: " << A[3][3] << endl;
     
 	cout << "M[0][0]: " << M[0][0] << endl;
     cout << "M[1][1]: " << M[1][1] << endl; 
 	cout << "M[2][2]: " << M[2][2] << endl;
-	cout << "A[3][3]: " << M[3][3] << endl;
-	**/
+	cout << "M[3][3]: " << M[3][3] << endl;
+
     return 0;
 }
