@@ -252,37 +252,32 @@ int main( int args, char *argv[] )
 	************/
 	cout << "********************************* Pooling R 5 ************************" << endl;
 	float max = 0;
-	#pragma omp parallel for private (z,x,y) schedule (dynamic, 1)
+	#pragma omp parallel for private (z,x,y, max) schedule (dynamic, 1)  
 	for (z=0; z<s; z++){
 		for(x=0; x<n/2; x++){
 			for(y=0; y<n/2; y++){
-				#pragma omp critical
+				if(B[z*n*n + 2*x*n + 2*y] > B[z*n*n + 2*x*n + 2*y + 1])//if(B[z][2*x][2*y] > B[z][2*x][2*y + 1])
 				{
-					if(B[z*n*n + 2*x*n + 2*y] > B[z*n*n + 2*x*n + 2*y + 1])//if(B[z][2*x][2*y] > B[z][2*x][2*y + 1])
-					{
-						max = B[z*n*n + 2*x*n + 2*y];
-						contador += 1;
-					}
-					else
-					{
-						max = B[z*n*n + 2*x*n + 2*y + 1];
-						contador += 1;
-					}	
-					
-					if(max < B[z*n*n + (2*x+1)*n + 2*y])//if(max < B[z][2*x+1][2*y])
-					{
-						max = B[z*n*n + (2*x+1)*n + 2*y];
-						contador += 1;
-					}
-					if(max <  B[z*n*n + (2*x+1)*n + 2*y+1])
-					{
-						max = B[z*n*n + (2*x+1)*n + 2*y+1];
-						contador += 1;
-					}
-					R[z*n*n/4 + x*n/2 + y] = max;
+					max = B[z*n*n + 2*x*n + 2*y];
+					contador += 1;
 				}
+				else
+				{
+					max = B[z*n*n + 2*x*n + 2*y + 1];
+					contador += 1;
+				}	
 				
-				
+				if(max < B[z*n*n + (2*x+1)*n + 2*y])//if(max < B[z][2*x+1][2*y])
+				{
+					max = B[z*n*n + (2*x+1)*n + 2*y];
+					contador += 1;
+				}
+				if(max <  B[z*n*n + (2*x+1)*n + 2*y+1])
+				{
+					max = B[z*n*n + (2*x+1)*n + 2*y+1];
+					contador += 1;
+				}
+				R[z*n*n/4 + x*n/2 + y] = max;
 			}
 		}
 	}
