@@ -92,22 +92,21 @@ int main( int args, char *argv[] )
 	
 	//cout << "----------------------------------------------------      Resultado A 1      ---------------------"  << endl;
 	//cout << n;
-    #pragma omp paralell for private (A)
-    {
-		for(x=0 ; x<n; x++)
-    	{
-	
-    		for(y=0; y<n; y++)
+    #pragma omp parallel for private(x, y) schedule (static)
+	for(x=0 ; x<n; x++)
+	{
+
+		for(y=0; y<n; y++)
+		{
+			
 			{
-				//#pragma omp critical
-				{
-    				A[x*n +y] = (float)(x*y + x + y) / (3 *n*n)*(1000);
-					contador += 10;
-				}
-    	
+				A[x*n +y] = (float)(x*y + x + y) / (3 *n*n)*(1000);
+				contador += 10;
 			}
+	
 		}
-    }
+	}
+
 	//cout << contador <<endl;
 	
 	cout << "A[0][0]: " << A[0] << endl;
@@ -121,7 +120,7 @@ int main( int args, char *argv[] )
 	Hemos generado  C[k][i][j] que es una bateria de filtros
 	************/
 	
-	gettimeofday(&tiempo0, NULL);
+	
 
 	
 	//cout << "-----------------------------------	Resultado C 2      ---------------------"  << endl;	
@@ -155,7 +154,7 @@ int main( int args, char *argv[] )
 	
     //cout << "-----------------------inicializaci�n de Vectores -------------------------" << endl;
 
-
+	////aqui tenemos z, x, y
     for(z = 0; z < s; z++)
     {
         for(x = 0; x < n; x++)
@@ -182,8 +181,9 @@ int main( int args, char *argv[] )
     }
     
     
-    
-	//cout << "-----------------------------------       Convolucion B  3     ---------------------"  << endl;
+    gettimeofday(&tiempo0, NULL);
+	cout << "-----------------------------------       Convolucion B  3     ---------------------"  << endl;
+	#pragma omp parallel for private (z, x, y, i, j) schedule (dynamic, 1)
 	for(z=0; z<s ; z++)
 	{
  		for(x=2; x<n-2; x++)
@@ -196,7 +196,7 @@ int main( int args, char *argv[] )
             	{
  					for(j= -m/2; j <= m/2; j++)
          			{
-         				//He a�adido el B[z][x][y] en el sumatorio, pues al final todo es una operaci�n de lo va sumando
+         				//He anyadido el B[z][x][y] en el sumatorio, pues al final todo es una operaci�n de lo va sumando
             	 		B[z*n*n + x*n + y] += A[(x+i)*n+y+j] * C[z][m/2 + i][m/2 + j];
 						contador += 2;
             	 		
@@ -205,10 +205,10 @@ int main( int args, char *argv[] )
 			}
 		}
 	}
-	//cout << "B[0][0][0]: " << B[0] << endl;
-	//cout << "B[1][1][1]: " << B[n*n + n + 1] << endl;
-    //cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
-    //cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
+	cout << "B[0][0][0]: " << B[0] << endl;
+	cout << "B[1][1][1]: " << B[n*n + n + 1] << endl;
+    cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
+    cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
 
 	
 	
@@ -217,9 +217,10 @@ int main( int args, char *argv[] )
 	***********/
 	//system("pause");	
 	
-	//cout << "-----------------------------------       Aplicacion lineal B  4     ---------------------" << endl;
+	cout << "-----------------------------------       Aplicacion lineal B  4     ---------------------" << endl;
 	
     float valor = 0;
+	#pragma omp parallel for private (z, x, y) schedule (dynamic, 1)
     for( z=0; z<s ; z++)
 	{
 	
@@ -239,45 +240,47 @@ int main( int args, char *argv[] )
         	}
     	}
 	}
-	//cout << "B[0][0][0]: " << B[0] << endl;
-	//cout << "B[1][1][1]: " << B[n*n + n + 1] << endl;
-    //cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
-    //cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
+	cout << "B[0][0][0]: " << B[0] << endl;
+	cout << "B[1][1][1]: " << B[n*n + n + 1] << endl;
+    cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
+    cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
 
 	//cout << "Parte Pulling" << endl;
 	//system("pause");
 	/*************
 	3.Pooling
 	************/
-	//cout << "********************************* Pooling R 5 ************************" << endl;
+	cout << "********************************* Pooling R 5 ************************" << endl;
 	float max = 0;
+	#pragma omp parallel for private (z,x,y) schedule (dynamic, 1)
 	for (z=0; z<s; z++){
 		for(x=0; x<n/2; x++){
 			for(y=0; y<n/2; y++){
-				
-				if(B[z*n*n + 2*x*n + 2*y] > B[z*n*n + 2*x*n + 2*y + 1])//if(B[z][2*x][2*y] > B[z][2*x][2*y + 1])
+				#pragma omp critical
 				{
-					max = B[z*n*n + 2*x*n + 2*y];
-					contador += 1;
+					if(B[z*n*n + 2*x*n + 2*y] > B[z*n*n + 2*x*n + 2*y + 1])//if(B[z][2*x][2*y] > B[z][2*x][2*y + 1])
+					{
+						max = B[z*n*n + 2*x*n + 2*y];
+						contador += 1;
+					}
+					else
+					{
+						max = B[z*n*n + 2*x*n + 2*y + 1];
+						contador += 1;
+					}	
+					
+					if(max < B[z*n*n + (2*x+1)*n + 2*y])//if(max < B[z][2*x+1][2*y])
+					{
+						max = B[z*n*n + (2*x+1)*n + 2*y];
+						contador += 1;
+					}
+					if(max <  B[z*n*n + (2*x+1)*n + 2*y+1])
+					{
+						max = B[z*n*n + (2*x+1)*n + 2*y+1];
+						contador += 1;
+					}
+					R[z*n*n/4 + x*n/2 + y] = max;
 				}
-				else
-				{
-					max = B[z*n*n + 2*x*n + 2*y + 1];
-					contador += 1;
-				}	
-				
-				if(max < B[z*n*n + (2*x+1)*n + 2*y])//if(max < B[z][2*x+1][2*y])
-				{
-					max = B[z*n*n + (2*x+1)*n + 2*y];
-					contador += 1;
-				}
-				if(max <  B[z*n*n + (2*x+1)*n + 2*y+1])
-				{
-					max = B[z*n*n + (2*x+1)*n + 2*y+1];
-					contador += 1;
-				}
-				R[z*n*n/4 + x*n/2 + y] = max;
-				
 				
 				
 			}
@@ -286,12 +289,12 @@ int main( int args, char *argv[] )
 	
 
 	
-	//cout << "R[0][0][0]: " << R[0] << endl;
-	//cout << "R[1][1][1]: " << R[n*n/4 + n/2 +1] << endl;
-    //cout << "R[2][2][2]: " << R[2*n*n/4 + 2*n/2 +2] << endl;
-    //cout << "R[3][3][3]: " << R[3*n*n/4 + 3*n/2 +3] << endl;
+	cout << "R[0][0][0]: " << R[0] << endl;
+	cout << "R[1][1][1]: " << R[n*n/4 + n/2 +1] << endl;
+    cout << "R[2][2][2]: " << R[2*n*n/4 + 2*n/2 +2] << endl;
+    cout << "R[3][3][3]: " << R[3*n*n/4 + 3*n/2 +3] << endl;
 	
-	//cout << "********************************* Promediado M 6 ************************" << endl;
+	cout << "********************************* Promediado M 6 ************************" << endl;
 	
 	
 	
@@ -303,6 +306,7 @@ int main( int args, char *argv[] )
 
 	
 	media = 0.0;
+	#pragma omp parallel for private (x, y, z) schedule (dynamic, 1)
 	for(x=0; x<n/2; x++)
 	{
 		for(y=0; y<n/2; y++)
