@@ -312,22 +312,13 @@ int main( int args, char *argv[] )
 			//cout << R[z][x][y];
 				M[x*n/2 + y] += R[z*n*n/4 + x*n/2 + y];
 				contador += 1;
-				if ( x == 0 && y ==0){
-					//cout << "----------------------- Valor R ----------------------------" << endl;
-					//cout << R[z*n*n/4 + x*n/2 + y];
-					contador += 2;
-				}
+				
 				
 			}
 			
 			
 			M[x*n/2 + y] = (float)(M[x*n/2 + y]/s);
 				contador += 4;
-			if ( x == 0 && y ==0){
-					//cout << "------------- Posible problemis------------------------" << endl;
-					//cout << M[x*n/2 + y] << endl;
-					contador +=2;
-				}
 		}
 			
 	}
