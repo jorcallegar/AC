@@ -92,7 +92,7 @@ int main( int args, char *argv[] )
 	
 	//cout << "----------------------------------------------------      Resultado A 1      ---------------------"  << endl;
 	//cout << n;
-    #pragma omp parallel for private(x, y) schedule (static)
+    #pragma omp parallel for 
 	for(x=0 ; x<n; x++)
 	{
 
@@ -221,7 +221,7 @@ int main( int args, char *argv[] )
 	cout << "-----------------------------------       Aplicacion lineal B  4     ---------------------" << endl;
 	
     float valor = 0;
-	#pragma omp parallel for private (z, x, y) schedule (dynamic, 1)
+	#pragma omp parallel for 
     for( z=0; z<s ; z++)
 	{
 	
@@ -253,7 +253,7 @@ int main( int args, char *argv[] )
 	************/
 	cout << "********************************* Pooling R 5 ************************" << endl;
 	float max = 0;
-	#pragma omp parallel for private (z,x,y, max) schedule (dynamic, 1)  
+	#pragma omp parallel for 
 	for (z=0; z<s; z++){
 		for(x=0; x<n/2; x++){
 			for(y=0; y<n/2; y++){
@@ -302,7 +302,7 @@ int main( int args, char *argv[] )
 
 	
 	media = 0.0;
-	#pragma omp parallel for private (x, y, z) schedule (dynamic, 1)
+	#pragma omp parallel for 
 	for(x=0; x<n/2; x++)
 	{
 		for(y=0; y<n/2; y++)
