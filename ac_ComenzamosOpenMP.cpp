@@ -183,12 +183,12 @@ int main( int args, char *argv[] )
     
     gettimeofday(&tiempo0, NULL);
 	cout << "-----------------------------------       Convolucion B  3     ---------------------"  << endl;
-	
+	#pragma omp parallel for private (z,x,y ,i, j) 
 	for(z=0; z<s ; z++)
 	{
  		for(x=2; x<n-2; x++)
  		{
-			#pragma omp parallel for private (i, j) 
+			
 			for(y=2; y<n-2; y++)
 			{
 				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezar�n evidentemete a 0
