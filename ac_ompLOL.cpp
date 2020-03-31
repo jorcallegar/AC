@@ -22,7 +22,7 @@ using namespace std;
 *		y: y de la matriz generada
 *		i,k,j: son variables iterativas
 *		s: numero de filtros
-*		m: dimensión de los filtros
+*		m: dimensiï¿½n de los filtros
 *
 *	Variables complejas:
 *		C[20][5][5]: bateria de filtros
@@ -257,7 +257,7 @@ int main( int args, char *argv[] )
 	************/
 	cout << "********************************* Pooling R 5 ************************" << endl;
 	float max = 0;
-	#pragma omp parallel for private (z,x,y, max) schedule (dynamic, 20*n/24)
+	#pragma omp parallel for private (z,x,y, max) schedule (dynamic, 20*n/24) reduction(max: max)
 	for (z=0; z<s; z++){
 		for(x=0; x<n/2; x++){
 			for(y=0; y<n/2; y++){
