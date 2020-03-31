@@ -90,23 +90,21 @@ int main( int args, char *argv[] )
 	*********/
 	
 	
-	//cout << "----------------------------------------------------      Resultado A 1      ---------------------"  << endl;
+	cout << "----------------------------------------------------      Resultado A 1      ---------------------"  << endl;
 	//cout << n;
-    #pragma omp parallel for 
 	for(x=0 ; x<n; x++)
-	{
-
-		for(y=0; y<n; y++)
-		{
-			
-			{
-				A[x*n +y] = (float)(x*y + x + y) / (3 *n*n)*(1000);
-				contador += 10;
-			}
+    {
 	
+    	for(y=0; y<n; y++)
+		{
+				
+    		A[x*n +y] = (float)(x*y + x + y) / (3 *n*n)*(1000);
+			contador += 10;
+    		
+    	
 		}
 	}
-
+	
 	//cout << contador <<endl;
 	
 	cout << "A[0][0]: " << A[0] << endl;
@@ -120,10 +118,10 @@ int main( int args, char *argv[] )
 	Hemos generado  C[k][i][j] que es una bateria de filtros
 	************/
 	
-	
+	gettimeofday(&tiempo0, NULL);
 
 	
-	//cout << "-----------------------------------	Resultado C 2      ---------------------"  << endl;	
+	cout << "-----------------------------------	Resultado C 2      ---------------------"  << endl;	
 	srand(5);
 	for(k = 0; k < s; k++)
 	{
@@ -140,10 +138,10 @@ int main( int args, char *argv[] )
 		}
 	}
 	
-	//cout << "C[0][0][0]: " << C[0][0][0] << endl;
-	//cout << "C[1][1][1]: " << C[1][1][1] << endl;
-    //cout << "C[2][2][2]: " << C[2][2][2] << endl;
-    //cout << "C[3][3][3]: " << C[3][3][3] << endl;
+	cout << "C[0][0][0]: " << C[0][0][0] << endl;
+	cout << "C[1][1][1]: " << C[1][1][1] << endl;
+    cout << "C[2][2][2]: " << C[2][2][2] << endl;
+    cout << "C[3][3][3]: " << C[3][3][3] << endl;
 	//system("pause");
 	
     
@@ -152,9 +150,7 @@ int main( int args, char *argv[] )
 	
 	**************/
 	
-    //cout << "-----------------------inicializaci�n de Vectores -------------------------" << endl;
-
-	////aqui tenemos z, x, y
+    cout << "-----------------------inicializaci�n de Vectores -------------------------" << endl;
     for(z = 0; z < s; z++)
     {
         for(x = 0; x < n; x++)
@@ -181,14 +177,12 @@ int main( int args, char *argv[] )
     }
     
     
-    gettimeofday(&tiempo0, NULL);
+    
 	cout << "-----------------------------------       Convolucion B  3     ---------------------"  << endl;
-	
 	for(z=0; z<s ; z++)
 	{
  		for(x=2; x<n-2; x++)
  		{
-			#pragma omp parallel for private (i, j) 
 			for(y=2; y<n-2; y++)
 			{
 				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezar�n evidentemete a 0
@@ -197,7 +191,7 @@ int main( int args, char *argv[] )
             	{
  					for(j= -m/2; j <= m/2; j++)
          			{
-         				//He anyadido el B[z][x][y] en el sumatorio, pues al final todo es una operaci�n de lo va sumando
+         				//He a�adido el B[z][x][y] en el sumatorio, pues al final todo es una operaci�n de lo va sumando
             	 		B[z*n*n + x*n + y] += A[(x+i)*n+y+j] * C[z][m/2 + i][m/2 + j];
 						contador += 2;
             	 		
@@ -221,7 +215,6 @@ int main( int args, char *argv[] )
 	cout << "-----------------------------------       Aplicacion lineal B  4     ---------------------" << endl;
 	
     float valor = 0;
-	#pragma omp parallel for 
     for( z=0; z<s ; z++)
 	{
 	
@@ -246,17 +239,17 @@ int main( int args, char *argv[] )
     cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
     cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
 
-	//cout << "Parte Pulling" << endl;
+	cout << "Parte Pulling" << endl;
 	//system("pause");
 	/*************
 	3.Pooling
 	************/
 	cout << "********************************* Pooling R 5 ************************" << endl;
 	float max = 0;
-	#pragma omp parallel for 
 	for (z=0; z<s; z++){
 		for(x=0; x<n/2; x++){
 			for(y=0; y<n/2; y++){
+				
 				if(B[z*n*n + 2*x*n + 2*y] > B[z*n*n + 2*x*n + 2*y + 1])//if(B[z][2*x][2*y] > B[z][2*x][2*y + 1])
 				{
 					max = B[z*n*n + 2*x*n + 2*y];
@@ -279,6 +272,9 @@ int main( int args, char *argv[] )
 					contador += 1;
 				}
 				R[z*n*n/4 + x*n/2 + y] = max;
+				
+				
+				
 			}
 		}
 	}
@@ -302,7 +298,6 @@ int main( int args, char *argv[] )
 
 	
 	media = 0.0;
-	#pragma omp parallel for 
 	for(x=0; x<n/2; x++)
 	{
 		for(y=0; y<n/2; y++)
@@ -313,20 +308,29 @@ int main( int args, char *argv[] )
 			//cout << R[z][x][y];
 				M[x*n/2 + y] += R[z*n*n/4 + x*n/2 + y];
 				contador += 1;
-				
+				if ( x == 0 && y ==0){
+					//cout << "----------------------- Valor R ----------------------------" << endl;
+					//cout << R[z*n*n/4 + x*n/2 + y];
+					contador += 2;
+				}
 				
 			}
 			
 			
 			M[x*n/2 + y] = (float)(M[x*n/2 + y]/s);
 				contador += 4;
+			if ( x == 0 && y ==0){
+					//cout << "------------- Posible problemis------------------------" << endl;
+					//cout << M[x*n/2 + y] << endl;
+					contador +=2;
+				}
 		}
 			
 	}
-	//cout << "M[0][0]: " << M[0] << endl;
-	//cout << "M[1][1]: " << M[n/2 + 1] << endl;
-    //cout << "M[2][2]: " << M[2*n/2 + 2] << endl;
-    //cout << "M[3][3]: " << M[3*n/2 + 3] << endl;
+	cout << "M[0][0]: " << M[0] << endl;
+	cout << "M[1][1]: " << M[n/2 + 1] << endl;
+    cout << "M[2][2]: " << M[2*n/2 + 2] << endl;
+    cout << "M[3][3]: " << M[3*n/2 + 3] << endl;
 	
 	
 	
@@ -342,10 +346,10 @@ int main( int args, char *argv[] )
 	cout << "Resultados finales ::::::::::::::::"<<endl;
 	///system("PAUSE");
     
-    //cout << "A[0][0]: " << A[0] << endl;
-	//cout << "A[1][1]: " << A[n + 1] << endl;
-    //cout << "A[2][2]: " << A[2*n + 2] << endl;
-    //cout << "A[3][3]: " << A[3*n + 3] << endl;
+	cout << "A[0][0]: " << A[0] << endl;
+	cout << "A[1][1]: " << A[n + 1] << endl;
+    cout << "A[2][2]: " << A[2*n + 2] << endl;
+    cout << "A[3][3]: " << A[3*n + 3] << endl;
     
 	cout << "M[0][0]: " << M[0] << endl;
     cout << "M[1][1]: " << M[n/2 + 1] << endl; 
