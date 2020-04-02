@@ -1,0 +1,2 @@
+Comm no lo vamos a gastar en practicas.
+mpicc -o  p ej1_mpi.c -Wall -O2 -gastar
