@@ -1,6 +1,6 @@
- for i in {1..10}
+ for i in 1 2 4 8 12 16 24;
 do
-   for j in 120 500 1000 1500 2000 2500 3000 3500 4000 4500 5000; do ./nac_dinamico $j >> tiempo_noop; done done
+   for j in 124 512 1024 2056 4048 6000; do OMP_NUM_THREADS=$i ./ac_omp $j >> tiempo_noop; done; done
 
 
 
