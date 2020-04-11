@@ -63,7 +63,6 @@ int main( int args, char *argv[] )
 		
 	}
 
-	long int contador=0;
 	
 	float *A;        //A[n][n];
 	float C[20][5][5];
@@ -99,13 +98,12 @@ int main( int args, char *argv[] )
 		{
 				
     		A[x*n +y] = (float)(x*y + x + y) / (3 *n*n)*(1000);
-			contador += 10;
+			
     		
     	
 		}
 	}
 	
-	//cout << contador <<endl;
 	
 	//cout << "A[0][0]: " << A[0] << endl;
 	//cout << "A[1][1]: " << A[n+1] << endl;
@@ -133,7 +131,7 @@ int main( int args, char *argv[] )
 				C[k][i][j]= (float)((rand()*pow(-1.0,j+k))/RAND_MAX);
 				// << C[k][i][j] << endl;
 				//cout << C[k][i][j] << "\t";
-				contador+= 14;
+			
 			}
 		}
 	}
@@ -161,10 +159,10 @@ int main( int args, char *argv[] )
                 if(y < n/2 && x < n/2)
                 {
                     R[z*n*n/4 + x*n/2 + y] = 0;
-					contador+=2;
+					
                     if(z == 0){
                         M[x*n/2 + y] = 0;
-						contador+=3;
+						
 					}
 						
 
@@ -193,7 +191,7 @@ int main( int args, char *argv[] )
          			{
          				//He a�adido el B[z][x][y] en el sumatorio, pues al final todo es una operaci�n de lo va sumando
             	 		B[z*n*n + x*n + y] += A[(x+i)*n+y+j] * C[z][m/2 + i][m/2 + j];
-						contador += 2;
+						
             	 		
 					}		  
        			}	   
@@ -227,7 +225,7 @@ int main( int args, char *argv[] )
             	//B[z][x][y]= (float)1.0/(1.0 + (float)1.0/(float)pow(2.718281828459045, (float)B[z][x][y]));  
                 
                 B[z*n*n + x*n + y]=(float)(1.0/(1.0+exp(-B[z*n*n + x*n + y])));
-				contador += 14;
+				
             	
             	//cout << endl;
             	//pause(1);
@@ -253,23 +251,23 @@ int main( int args, char *argv[] )
 				if(B[z*n*n + 2*x*n + 2*y] > B[z*n*n + 2*x*n + 2*y + 1])//if(B[z][2*x][2*y] > B[z][2*x][2*y + 1])
 				{
 					max = B[z*n*n + 2*x*n + 2*y];
-					contador += 1;
+					
 				}
 				else
 				{
 					max = B[z*n*n + 2*x*n + 2*y + 1];
-					contador += 1;
+					
 				}	
 				
 				if(max < B[z*n*n + (2*x+1)*n + 2*y])//if(max < B[z][2*x+1][2*y])
 				{
 					max = B[z*n*n + (2*x+1)*n + 2*y];
-					contador += 1;
+					
 				}
 				if(max <  B[z*n*n + (2*x+1)*n + 2*y+1])
 				{
 					max = B[z*n*n + (2*x+1)*n + 2*y+1];
-					contador += 1;
+					
 				}
 				R[z*n*n/4 + x*n/2 + y] = max;
 				
@@ -307,22 +305,22 @@ int main( int args, char *argv[] )
 			{
 			//cout << R[z][x][y];
 				M[x*n/2 + y] += R[z*n*n/4 + x*n/2 + y];
-				contador += 1;
+				
 				if ( x == 0 && y ==0){
 					//cout << "----------------------- Valor R ----------------------------" << endl;
 					//cout << R[z*n*n/4 + x*n/2 + y];
-					contador += 2;
+					
 				}
 				
 			}
 			
 			
 			M[x*n/2 + y] = (float)(M[x*n/2 + y]/s);
-				contador += 4;
+				
 			if ( x == 0 && y ==0){
 					//cout << "------------- Posible problemis------------------------" << endl;
 					//cout << M[x*n/2 + y] << endl;
-					contador +=2;
+					
 				}
 		}
 			
@@ -342,7 +340,7 @@ int main( int args, char *argv[] )
 	time= ((tiempo1.tv_sec*pow(10,6)) +(tiempo1.tv_usec)) - ((tiempo0.tv_sec*pow(10,6)) +(tiempo0.tv_usec))   ;
 	cout << time << ";";
 	cout <<  n << ",";
-	cout << (contador/pow(10,6)) <<":"<< endl;
+
 	//cout << "Resultados finales ::::::::::::::::"<<endl;
 	///system("PAUSE");
     
