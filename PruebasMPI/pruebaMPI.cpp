@@ -64,12 +64,14 @@ int main( int args, char *argv[] )
 	}
 
 	
-	float *A;        //A[n][n];
+	
 	float C[20][5][5];
 	
 	long int s = 20;
 	long int m = 5;
-	
+
+
+	float *A;          //A[n][n];
 	float *B;          //B[s][n][n];
 	float *R;          //R[s][n/2][n/2];
 	float *M;          //M[n/2][n/2];
@@ -183,13 +185,11 @@ int main( int args, char *argv[] )
  		{
 			for(y=2; y<n-2; y++)
 			{
-				//Lo inicializo a 0, porque cada uno va a tener un valor distinto, los cuales empezar�n evidentemete a 0
-				B[z*n*n + x*n + y] = 0;						//Cambio -> A�adido
+				B[z*n*n + x*n + y] = 0;					
 				for(i= -m/2; i <= m/2; i++)
             	{
  					for(j= -m/2; j <= m/2; j++)
          			{
-         				//He a�adido el B[z][x][y] en el sumatorio, pues al final todo es una operaci�n de lo va sumando
             	 		B[z*n*n + x*n + y] += A[(x+i)*n+y+j] * C[z][m/2 + i][m/2 + j];
 						
             	 		
