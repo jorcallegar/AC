@@ -226,7 +226,7 @@ int main( int args, char *argv[] )
 
         //cout << "-----------------------------------       Aplicacion lineal B  4     ---------------------" << endl;
 
-    float valor = 0;
+ 
         #pragma omp parallel for private (y) collapse(2) schedule (dynamic)
     for( z=0; z<s ; z++)
         {

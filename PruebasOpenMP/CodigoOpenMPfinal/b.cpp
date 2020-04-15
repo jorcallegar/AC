@@ -5,7 +5,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <fstream>
-
+#include <omp.h>
 
 
 using namespace std;
@@ -51,6 +51,8 @@ int main( int args, char *argv[] )
     R = new float[s*n/2*n/2];
     M = new float[n/2*n/2];
     struct timeval tiempo0, tiempo1;
+
+    int nthreads, thread;
 
     long time;
 
@@ -105,7 +107,9 @@ int main( int args, char *argv[] )
     ///******************************************************///
 
     gettimeofday(&tiempo0, NULL);
-    
+        //cout << "-----------------------------------       Convolucion B  3     ---------------------"  << endl;
+    //#pragma omp parallel for private (i, j)  collapse(3) schedule(dynamic) //z, x,
+    #pragma omp parallel for collapse(3) private(i,j) schedule(static) //z, x,
     for(z=0; z<s ; z++)
     {
         for(x=2; x<n-2; x++)
@@ -117,35 +121,18 @@ int main( int args, char *argv[] )
                     for(j= -m/2; j <= m/2; j++)
                     {
                         B[z*n*n + x*n + y] += A[(x+i)*n+y+j] * C[z][m/2 + i][m/2 + j];
+
                     }
                 }
             }
         }
     }
-    cout << "B[0][0][0]: " << B[0] << endl;
-    cout << "B[1][1][1]: " << B[n*n + n + 1] << endl;
-    cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
-    cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
-
-    for( z=0; z<s ; z++)
-    {
-        for(x=0; x<n; x++)
-        {
-            for(y=0; y<n; y++)
-            {
-                B[z*n*n + x*n + y]=(float)(1.0/(1.0+exp(-B[z*n*n + x*n + y])));
-            }
-        }
-    }
-
-    cout << "B[0][0][0]: " << B[0] << endl;
-    cout << "B[1][1][1]: " << B[n*n + n + 1] << endl;
-    cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
-    cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
-
     gettimeofday(&tiempo1, NULL);
-
-
+    cout << "B[0][0][0]: " << B[0] << endl;
+    cout << "B[1][1][1]: " << B[n*n + n + 1] << endl;
+    cout << "B[2][2][2]: " << B[2*n*n + 2*n + 2] << endl;
+    cout << "B[3][3][3]: " << B[3*n*n + 3*n + 3] << endl;
     time= ((tiempo1.tv_sec*pow(10,6)) +(tiempo1.tv_usec)) - ((tiempo0.tv_sec*pow(10,6)) +(tiempo0.tv_usec))   ;
     cout << time << ";";
+    return 0;
 }

@@ -302,28 +302,17 @@ int main( int args, char *argv[] )
 	{
 		for(y=0; y<n/2; y++)
 		{
-			M[x*n/2 + y] = 0;
+			
 			for (z=0; z<s; z++)
 			{
-			//cout << R[z][x][y];
+	
 				M[x*n/2 + y] += R[z*n*n/4 + x*n/2 + y];
-				contador += 1;
-				if ( x == 0 && y ==0){
-					//cout << "----------------------- Valor R ----------------------------" << endl;
-					//cout << R[z*n*n/4 + x*n/2 + y];
-					contador += 2;
-				}
 				
 			}
 			
 			
 			M[x*n/2 + y] = (float)(M[x*n/2 + y]/s);
-				contador += 4;
-			if ( x == 0 && y ==0){
-					//cout << "------------- Posible problemis------------------------" << endl;
-					//cout << M[x*n/2 + y] << endl;
-					contador +=2;
-				}
+			
 		}
 			
 	}
@@ -346,15 +335,15 @@ int main( int args, char *argv[] )
 	//cout << "Resultados finales ::::::::::::::::"<<endl;
 	///system("PAUSE");
     
-    //cout << "A[0][0]: " << A[0] << endl;
-	//cout << "A[1][1]: " << A[n + 1] << endl;
-    //cout << "A[2][2]: " << A[2*n + 2] << endl;
-    //cout << "A[3][3]: " << A[3*n + 3] << endl;
+    cout << "A[0][0]: " << A[0] << endl;
+	cout << "A[1][1]: " << A[n + 1] << endl;
+    cout << "A[2][2]: " << A[2*n + 2] << endl;
+    cout << "A[3][3]: " << A[3*n + 3] << endl;
     
-	//cout << "M[0][0]: " << M[0] << endl;
-    //cout << "M[1][1]: " << M[n/2 + 1] << endl; 
-	//cout << "M[2][2]: " << M[2*n/2 + 2] << endl;
-	//cout << "M[3][3]: " << M[3*n/2 + 3] << endl;
+	cout << "M[0][0]: " << M[0] << endl;
+    cout << "M[1][1]: " << M[n/2 + 1] << endl; 
+	cout << "M[2][2]: " << M[2*n/2 + 2] << endl;
+	cout << "M[3][3]: " << M[3*n/2 + 3] << endl;
     return 0;
 	
 }
