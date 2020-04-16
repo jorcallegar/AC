@@ -104,7 +104,7 @@ int main( int args, char *argv[] )
     gettimeofday(&tiempo0, NULL);
 
     //#pragma omp parallel for private (i, j)  collapse(3) schedule(dynamic) //z, x,
-    #pragma omp parallel for collapse(3) private(i,j) schedule(dynamic)//z, x,
+    #pragma omp parallel for shared(A,B,C) collapse(3) private(i,j) schedule(static)//z, x,
     for(z=0; z<s ; z++)
     {
         for(x=2; x<n-2; x++)
@@ -131,7 +131,7 @@ int main( int args, char *argv[] )
 
 
 
-    #pragma omp parallel for private(y) collapse(2) schedule (static)
+    #pragma omp parallel for shared(B) private(y) collapse(2) schedule (static)
     for( z=0; z<s ; z++)
     {
         for(x=0; x<n; x++)
@@ -150,7 +150,7 @@ int main( int args, char *argv[] )
 
     float max = 0;
 
-    #pragma omp parallel for private (y, max) collapse(2) schedule (dynamic)
+    #pragma omp parallel for shared(B) private (y, max) collapse(2) schedule (dynamic)
     for (z=0; z<s; z++){
         for(x=0; x<n/2; x++)
         {
@@ -182,7 +182,7 @@ int main( int args, char *argv[] )
 
 
     media = 0;
-    #pragma omp parallel for private (z) collapse(2) schedule(static)
+    #pragma omp parallel for shared(M,R) private (z) collapse(2) schedule(static)
     for(x=0; x<n/2; x++)
 	{
 		for(y=0; y<n/2; y++)
@@ -191,12 +191,8 @@ int main( int args, char *argv[] )
 			{
 	    	    M[x*n/2 + y] += R[z*n*n/4 + x*n/2 + y];		
 			}
-			
-			
 			M[x*n/2 + y] = (float)(M[x*n/2 + y]/s);
-			
 		}
-			
 	}
   
 
